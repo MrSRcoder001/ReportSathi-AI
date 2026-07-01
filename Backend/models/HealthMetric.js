@@ -24,7 +24,7 @@ const healthMetricSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['LOW', 'NORMAL', 'HIGH', 'UNKNOWN'],
+    enum: ['LOW', 'NORMAL', 'HIGH', 'UNKNOWN', 'UNINTERPRETABLE'],
     default: 'UNKNOWN'
   },
   reportDate: {
