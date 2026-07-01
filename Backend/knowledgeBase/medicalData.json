@@ -1,0 +1,47 @@
+[
+  {
+    "parameter": "Hemoglobin",
+    "category": "Hematology",
+    "normalRange": "12-15",
+    "unit": "g/dL",
+    "explanation": "Hemoglobin is a protein in your red blood cells that carries oxygen to your body's organs and tissues and transports carbon dioxide from your organs and tissues back to your lungs.",
+    "lowMeaning": "A low hemoglobin level is referred to as anemia or low red count. A lower than normal number of red blood cells is referred to as anemia and hemoglobin levels reflect this number.",
+    "highMeaning": "A high hemoglobin count occurs more commonly when your body requires an increased oxygen-carrying capacity, usually because you smoke or live at high altitudes."
+  },
+  {
+    "parameter": "WBC",
+    "category": "Hematology",
+    "normalRange": "4000-11000",
+    "unit": "cells/mcL",
+    "explanation": "White blood cells (WBCs) are a part of your immune system that protects your body from infection.",
+    "lowMeaning": "A low white blood cell count (leukopenia) means you have fewer white blood cells than normal, which can increase your risk of getting an infection.",
+    "highMeaning": "A high white blood cell count (leukocytosis) isn't a specific disease, but it can indicate an underlying problem, such as infection, stress, inflammation, trauma, allergy, or certain diseases."
+  },
+  {
+    "parameter": "Platelets",
+    "category": "Hematology",
+    "normalRange": "150000-450000",
+    "unit": "cells/mcL",
+    "explanation": "Platelets are tiny blood cells that help your body form clots to stop bleeding.",
+    "lowMeaning": "A lower than normal platelet count is called thrombocytopenia. If your blood has a low number of platelets, it may be hard for your blood to clot.",
+    "highMeaning": "A higher than normal platelet count is called thrombocytosis. This can cause unnecessary clotting or sometimes bleeding."
+  },
+  {
+    "parameter": "Cholesterol",
+    "category": "Lipid Profile",
+    "normalRange": "125-200",
+    "unit": "mg/dL",
+    "explanation": "Cholesterol is a waxy, fat-like substance that's found in all the cells in your body.",
+    "lowMeaning": "Very low cholesterol is rare but may be linked to certain conditions like hyperthyroidism or malnutrition.",
+    "highMeaning": "High cholesterol can increase your risk of heart disease. With high cholesterol, you can develop fatty deposits in your blood vessels."
+  },
+  {
+    "parameter": "Creatinine",
+    "category": "Kidney Function",
+    "normalRange": "0.7-1.3",
+    "unit": "mg/dL",
+    "explanation": "Creatinine is a chemical waste product that's produced by your muscle metabolism and to a smaller extent by eating meat. Healthy kidneys filter creatinine and other waste products from your blood.",
+    "lowMeaning": "Low creatinine levels are uncommon and not usually a cause for concern. They may be seen in people with low muscle mass.",
+    "highMeaning": "High creatinine levels may indicate that your kidneys aren't working well."
+  }
+]
