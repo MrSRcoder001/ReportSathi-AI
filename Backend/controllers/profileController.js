@@ -15,7 +15,7 @@ const getProfiles = async (req, res) => {
 // Create a new profile
 const createProfile = async (req, res) => {
   try {
-    const { profileName, relation, age, gender, bloodGroup } = req.body;
+    const { profileName, relation, age, gender, bloodGroup, conditions, allergies, medications, doctorNotes } = req.body;
     
     const profile = await PatientProfile.create({
       userId: req.user._id,
@@ -23,7 +23,11 @@ const createProfile = async (req, res) => {
       relation,
       age,
       gender,
-      bloodGroup
+      bloodGroup,
+      conditions: conditions || [],
+      allergies: allergies || [],
+      medications: medications || [],
+      doctorNotes: doctorNotes || ''
     });
     
     res.status(201).json(profile);

@@ -34,11 +34,11 @@ ${context}
 Tasks:
 1. Identify the normal range from the reference knowledge or patient reference range.
 2. Compare the patient value to the normal range.
-3. Determine the status strictly as one of: "LOW", "NORMAL", "HIGH", "UNKNOWN", or "UNINTERPRETABLE".
+3. Determine the status strictly as one of: "LOW", "NORMAL", "HIGH", "CRITICAL", "UNKNOWN", or "UNINTERPRETABLE". Mark it "CRITICAL" if the value is extremely high or low, representing a serious clinical anomaly that requires urgent attention.
 4. Provide a brief 1-sentence explanation. Do not diagnose.
 
 Respond strictly with a JSON object. Do not include markdown formatting.
-Keys: "normalRange" (string), "status" (string: LOW/NORMAL/HIGH/UNKNOWN/UNINTERPRETABLE), "explanation" (string).`;
+Keys: "normalRange" (string), "status" (string: LOW/NORMAL/HIGH/CRITICAL/UNKNOWN/UNINTERPRETABLE), "explanation" (string).`;
 
       const response = await axios.post(`${process.env.OLLAMA_URL || 'http://localhost:11434'}/api/generate`, {
         model: process.env.AI_MODEL || 'llama3',

@@ -24,7 +24,7 @@ async function runTests() {
     console.log('Parsed:', parsed);
 
     console.log('\n2. Testing Analysis Agent...');
-    const analysis = await analyzeParameters(parsed);
+    const analysis = await analyzeParameters(parsed.parameters);
     console.log('Analysis:', JSON.stringify(analysis, null, 2));
 
     console.log('\n3. Testing Summary Agent (Marathi)...');

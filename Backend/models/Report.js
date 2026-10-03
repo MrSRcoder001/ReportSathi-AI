@@ -47,10 +47,17 @@ const reportSchema = new mongoose.Schema({
     normalRange: String,
     status: {
       type: String,
-      enum: ['LOW', 'NORMAL', 'HIGH', 'UNKNOWN', 'UNINTERPRETABLE'],
       default: 'UNKNOWN'
     },
     insight: {
+      type: String,
+      default: ''
+    },
+    confidence: {
+      type: Number,
+      default: 100
+    },
+    referenceRangeSource: {
       type: String,
       default: ''
     }
@@ -61,12 +68,36 @@ const reportSchema = new mongoose.Schema({
   },
   language: {
     type: String,
-    default: 'en'
+    default: 'English'
   },
   status: {
     type: String,
-    enum: ['pending', 'processing', 'completed', 'failed'],
+    enum: ['pending', 'processing', 'review_pending', 'completed', 'failed'],
     default: 'pending',
+  },
+  confirmed: {
+    type: Boolean,
+    default: true
+  },
+  criticalAlert: {
+    type: Boolean,
+    default: false
+  },
+  criticalAlertDetails: {
+    type: String,
+    default: ''
+  },
+  medications: {
+    type: [String],
+    default: []
+  },
+  symptoms: {
+    type: [String],
+    default: []
+  },
+  shareToken: {
+    type: String,
+    default: null
   },
   precautions: {
     type: [String],
@@ -87,6 +118,10 @@ const reportSchema = new mongoose.Schema({
 }, {
   timestamps: true,
 });
+
+// Production indexes for high-speed queries
+reportSchema.index({ userId: 1, createdAt: -1 });
+reportSchema.index({ patientProfileId: 1, createdAt: -1 });
 
 const Report = mongoose.model('Report', reportSchema);
 module.exports = Report;

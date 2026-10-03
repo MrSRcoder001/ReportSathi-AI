@@ -24,7 +24,6 @@ const healthMetricSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['LOW', 'NORMAL', 'HIGH', 'UNKNOWN', 'UNINTERPRETABLE'],
     default: 'UNKNOWN'
   },
   reportDate: {
@@ -34,6 +33,10 @@ const healthMetricSchema = new mongoose.Schema({
 }, {
   timestamps: true,
 });
+
+// Indexes for fast trends and report query resolution
+healthMetricSchema.index({ patientProfileId: 1, parameter: 1, reportDate: -1 });
+healthMetricSchema.index({ reportId: 1 });
 
 const HealthMetric = mongoose.model('HealthMetric', healthMetricSchema);
 module.exports = HealthMetric;

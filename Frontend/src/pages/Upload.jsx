@@ -42,7 +42,7 @@ const Upload = () => {
           'Content-Type': 'multipart/form-data'
         }
       });
-      navigate(`/analysis/${data.reportId}`);
+      navigate(`/reports/${data.reportId}/review`);
     } catch (err) {
       console.error(err);
       setError(err.response?.data?.message || 'Failed to upload report');

@@ -13,6 +13,9 @@ import PatientProfiles from './pages/PatientProfiles';
 import Comparison from './pages/Comparison';
 import History from './pages/History';
 import KnowledgeHub from './pages/KnowledgeHub';
+import Review from './pages/Review';
+import SharedReport from './pages/SharedReport';
+import AdminDashboard from './pages/AdminDashboard';
 import Settings from './pages/Settings';
 import { AuthProvider, AuthContext } from './context/AuthContext';
 import { ProfileProvider } from './context/ProfileContext';
@@ -35,6 +38,13 @@ const ProtectedRoute = ({ children }) => {
   return <DashboardLayout>{children}</DashboardLayout>;
 };
 
+const AdminRoute = ({ children }) => {
+  const { user, loading } = useContext(AuthContext);
+  if (loading) return <div>Loading...</div>;
+  if (!user || user.role !== 'admin') return <Navigate to="/dashboard" />;
+  return <DashboardLayout>{children}</DashboardLayout>;
+};
+
 function App() {
   return (
     <Router>
@@ -49,7 +59,10 @@ function App() {
               
               <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
               <Route path="/upload" element={<ProtectedRoute><Upload /></ProtectedRoute>} />
+              <Route path="/reports/:id/review" element={<ProtectedRoute><Review /></ProtectedRoute>} />
               <Route path="/analysis/:id" element={<ProtectedRoute><Analysis /></ProtectedRoute>} />
+              <Route path="/shared/:shareToken" element={<SharedReport />} />
+              <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
               <Route path="/comparison" element={<ProtectedRoute><Comparison /></ProtectedRoute>} />
               <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
               <Route path="/profiles" element={<ProtectedRoute><PatientProfiles /></ProtectedRoute>} />

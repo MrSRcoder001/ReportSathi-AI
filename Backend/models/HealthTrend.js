@@ -14,5 +14,8 @@ const healthTrendSchema = new mongoose.Schema({
   timestamps: true,
 });
 
+// Index to fetch trends per patient profile quickly
+healthTrendSchema.index({ patientProfileId: 1 });
+
 const HealthTrend = mongoose.model('HealthTrend', healthTrendSchema);
 module.exports = HealthTrend;

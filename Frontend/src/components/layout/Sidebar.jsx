@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Upload, History, User, Settings, BookOpen } from 'lucide-react';
+import { LayoutDashboard, Upload, History, User, Settings, BookOpen, ShieldAlert } from 'lucide-react';
 import { cn } from '../../lib/utils';
+import { AuthContext } from '../../context/AuthContext';
 
 const Sidebar = () => {
   const location = useLocation();
+  const { user } = useContext(AuthContext);
   
   const navItems = [
     { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
@@ -14,6 +16,10 @@ const Sidebar = () => {
     { icon: User, label: 'Profile', path: '/profile' },
     { icon: Settings, label: 'Settings', path: '/settings' },
   ];
+
+  if (user && user.role === 'admin') {
+    navItems.push({ icon: ShieldAlert, label: 'Admin Telemetry', path: '/admin' });
+  }
 
   return (
     <aside className="w-64 border-r h-[calc(100vh-4rem)] glassmorphism bg-white/50 p-4 flex flex-col gap-2">

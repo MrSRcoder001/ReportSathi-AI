@@ -1,0 +1,26 @@
+2026-07-01T18:21:37.911Z\nTypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string. Received undefined
+    at Object.extname (node:path:987:5)
+    at extractText (D:\Myproject\AI Medicine Analyzer\Backend\services\ocrService.js:8:20)
+    at processReport (D:\Myproject\AI Medicine Analyzer\Backend\controllers\reportController.js:46:33)
+    at D:\Myproject\AI Medicine Analyzer\Backend\testUpload.js:19:9
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n\n2026-07-16T18:55:55.514Z\nMongoServerError: This MongoDB deployment does not support retryable writes. Please add retryWrites=false to your connection string.
+    at executeOperationWithRetries (D:\Myproject\AI Medicine Analyzer\Backend\node_modules\mongodb\lib\operations\execute_operation.js:217:23)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async executeOperation (D:\Myproject\AI Medicine Analyzer\Backend\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async Collection.insertOne (D:\Myproject\AI Medicine Analyzer\Backend\node_modules\mongodb\lib\collection.js:154:16)
+    at async model.$__save (D:\Myproject\AI Medicine Analyzer\Backend\node_modules\mongoose\lib\model.js:433:16)
+    at async maybeTracedSave (D:\Myproject\AI Medicine Analyzer\Backend\node_modules\mongoose\lib\model.js:674:7)
+    at async D:\Myproject\AI Medicine Analyzer\Backend\node_modules\mongoose\lib\model.js:2831:9
+    at async Promise.all (index 0)
+    at async model.create (D:\Myproject\AI Medicine Analyzer\Backend\node_modules\mongoose\lib\model.js:2816:11)
+    at async processReport (D:\Myproject\AI Medicine Analyzer\Backend\controllers\reportController.js:122:9)\n\n2026-07-16T18:56:46.923Z\nMongoServerError: This MongoDB deployment does not support retryable writes. Please add retryWrites=false to your connection string.
+    at executeOperationWithRetries (D:\Myproject\AI Medicine Analyzer\Backend\node_modules\mongodb\lib\operations\execute_operation.js:217:23)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async executeOperation (D:\Myproject\AI Medicine Analyzer\Backend\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async Collection.insertOne (D:\Myproject\AI Medicine Analyzer\Backend\node_modules\mongodb\lib\collection.js:154:16)
+    at async model.$__save (D:\Myproject\AI Medicine Analyzer\Backend\node_modules\mongoose\lib\model.js:433:16)
+    at async maybeTracedSave (D:\Myproject\AI Medicine Analyzer\Backend\node_modules\mongoose\lib\model.js:674:7)
+    at async D:\Myproject\AI Medicine Analyzer\Backend\node_modules\mongoose\lib\model.js:2831:9
+    at async Promise.all (index 0)
+    at async model.create (D:\Myproject\AI Medicine Analyzer\Backend\node_modules\mongoose\lib\model.js:2816:11)
+    at async executeWrites (D:\Myproject\AI Medicine Analyzer\Backend\controllers\reportController.js:113:9)\n\n

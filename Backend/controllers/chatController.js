@@ -3,7 +3,7 @@ const { askQuestion } = require('../agents/chatAgent');
 
 const askReportQuestion = async (req, res) => {
   try {
-    const { id } = params = req.params;
+    const { id } = req.params;
     const { question } = req.body;
 
     if (!question) {

@@ -8,7 +8,7 @@ import api from '../services/api';
 const PatientProfiles = () => {
   const { profiles, fetchProfiles, activeProfile, changeActiveProfile } = useContext(ProfileContext);
   const [isAdding, setIsAdding] = useState(false);
-  const [formData, setFormData] = useState({ profileName: '', relation: 'Self', age: '', gender: 'Male', bloodGroup: 'Unknown' });
+  const [formData, setFormData] = useState({ profileName: '', relation: 'Self', age: '', gender: 'Male', bloodGroup: 'Unknown', conditions: '', allergies: '', medications: '', doctorNotes: '' });
 
   const relations = ['Self', 'Father', 'Mother', 'Brother', 'Sister', 'Son', 'Daughter', 'Grandfather', 'Grandmother', 'Other'];
   const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-', 'Unknown'];
@@ -16,9 +16,15 @@ const PatientProfiles = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.post('/profiles', formData);
+      const payload = {
+        ...formData,
+        conditions: formData.conditions.split(',').map(s => s.trim()).filter(Boolean),
+        allergies: formData.allergies.split(',').map(s => s.trim()).filter(Boolean),
+        medications: formData.medications.split(',').map(s => s.trim()).filter(Boolean)
+      };
+      await api.post('/profiles', payload);
       setIsAdding(false);
-      setFormData({ profileName: '', relation: 'Self', age: '', gender: 'Male', bloodGroup: 'Unknown' });
+      setFormData({ profileName: '', relation: 'Self', age: '', gender: 'Male', bloodGroup: 'Unknown', conditions: '', allergies: '', medications: '', doctorNotes: '' });
       fetchProfiles();
     } catch (error) {
       console.error('Failed to create profile', error);
@@ -82,6 +88,22 @@ const PatientProfiles = () => {
                     {bloodGroups.map(b => <option key={b} value={b}>{b}</option>)}
                   </select>
                 </div>
+                <div>
+                  <label className="text-sm font-medium">Allergies (comma-separated)</label>
+                  <input value={formData.allergies} onChange={e => setFormData({...formData, allergies: e.target.value})} className="w-full p-2 border rounded" placeholder="e.g. Penicillin, Peanuts" />
+                </div>
+                <div>
+                  <label className="text-sm font-medium">Chronic Conditions (comma-separated)</label>
+                  <input value={formData.conditions} onChange={e => setFormData({...formData, conditions: e.target.value})} className="w-full p-2 border rounded" placeholder="e.g. Diabetes, Hypertension" />
+                </div>
+                <div>
+                  <label className="text-sm font-medium">Current Medications (comma-separated)</label>
+                  <input value={formData.medications} onChange={e => setFormData({...formData, medications: e.target.value})} className="w-full p-2 border rounded" placeholder="e.g. Metformin 500mg" />
+                </div>
+                <div className="md:col-span-2">
+                  <label className="text-sm font-medium">Personal Doctor Notes</label>
+                  <textarea value={formData.doctorNotes} onChange={e => setFormData({...formData, doctorNotes: e.target.value})} className="w-full p-2 border rounded" placeholder="Specific notes from your physician or health concerns..." rows={2} />
+                </div>
               </div>
               <div className="flex justify-end gap-2 pt-4">
                 <Button type="button" variant="outline" onClick={() => setIsAdding(false)}>Cancel</Button>
@@ -95,8 +117,8 @@ const PatientProfiles = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {profiles.map(profile => (
           <Card key={profile._id} className={`cursor-pointer transition-all ${activeProfile?._id === profile._id ? 'ring-2 ring-primary border-primary' : 'hover:border-primary/50'}`} onClick={() => changeActiveProfile(profile._id)}>
-            <CardContent className="p-6">
-              <div className="flex justify-between items-start mb-4">
+            <CardContent className="p-6 space-y-4">
+              <div className="flex justify-between items-start">
                 <div className={`p-3 rounded-full ${activeProfile?._id === profile._id ? 'bg-primary text-white' : 'bg-slate-100 text-slate-500'}`}>
                   <User className="h-6 w-6" />
                 </div>
@@ -104,14 +126,27 @@ const PatientProfiles = () => {
                   <button onClick={(e) => { e.stopPropagation(); handleDelete(profile._id); }} className="p-1 text-slate-400 hover:text-danger"><Trash2 className="h-4 w-4" /></button>
                 </div>
               </div>
-              <h3 className="font-bold text-lg text-slate-900">{profile.profileName}</h3>
-              <p className="text-sm text-slate-500 font-medium mb-4">{profile.relation}</p>
-              
-              <div className="grid grid-cols-2 gap-2 text-sm text-slate-600 bg-slate-50 p-3 rounded-lg">
-                <div><span className="text-slate-400 text-xs block">Age</span> {profile.age || '-'}</div>
-                <div><span className="text-slate-400 text-xs block">Gender</span> {profile.gender || '-'}</div>
-                <div><span className="text-slate-400 text-xs block">Blood</span> {profile.bloodGroup || '-'}</div>
+              <div>
+                <h3 className="font-bold text-lg text-slate-900">{profile.profileName}</h3>
+                <p className="text-sm text-slate-500 font-medium">{profile.relation}</p>
               </div>
+              
+              <div className="grid grid-cols-3 gap-2 text-xs text-slate-600 bg-slate-50 p-3 rounded-lg border">
+                <div><span className="text-slate-400 text-[10px] block uppercase font-semibold">Age</span> {profile.age || '-'}</div>
+                <div><span className="text-slate-400 text-[10px] block uppercase font-semibold">Gender</span> {profile.gender || '-'}</div>
+                <div><span className="text-slate-400 text-[10px] block uppercase font-semibold">Blood</span> {profile.bloodGroup || '-'}</div>
+              </div>
+
+              {(profile.conditions?.length > 0 || profile.allergies?.length > 0) && (
+                <div className="text-xs space-y-1">
+                  {profile.conditions?.length > 0 && (
+                    <div><span className="text-slate-400 block font-semibold">Chronic Conditions:</span> <span className="text-slate-700">{profile.conditions.join(', ')}</span></div>
+                  )}
+                  {profile.allergies?.length > 0 && (
+                    <div><span className="text-slate-400 block font-semibold">Allergies:</span> <span className="text-slate-700">{profile.allergies.join(', ')}</span></div>
+                  )}
+                </div>
+              )}
             </CardContent>
           </Card>
         ))}

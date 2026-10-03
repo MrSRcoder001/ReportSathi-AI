@@ -26,10 +26,29 @@ const patientProfileSchema = new mongoose.Schema({
     type: String,
     enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-', 'Unknown'],
     default: 'Unknown'
+  },
+  conditions: {
+    type: [String],
+    default: []
+  },
+  allergies: {
+    type: [String],
+    default: []
+  },
+  medications: {
+    type: [String],
+    default: []
+  },
+  doctorNotes: {
+    type: String,
+    default: ''
   }
 }, {
   timestamps: true,
 });
+
+// Index to fetch a user's patient profiles quickly
+patientProfileSchema.index({ userId: 1 });
 
 const PatientProfile = mongoose.model('PatientProfile', patientProfileSchema);
 module.exports = PatientProfile;

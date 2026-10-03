@@ -56,16 +56,39 @@ class SimpleMemoryVectorStore {
       normA += vecA[i] * vecA[i];
       normB += vecB[i] * vecB[i];
     }
+    if (normA === 0 || normB === 0) return 0;
     return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
   }
 
   async similaritySearch(query, k = 2) {
-    const queryVector = await this.embeddings.embedQuery(query);
+    let queryVector;
+    try {
+      queryVector = await this.embeddings.embedQuery(query);
+    } catch (err) {
+      console.warn("Failed to get query embedding. Using zero-vector fallback.");
+      queryVector = new Array(768).fill(0);
+    }
     
-    const scoredDocs = this.docs.map(doc => ({
-      ...doc,
-      score: this.cosineSimilarity(queryVector, doc.vector)
-    }));
+    const isZeroVector = queryVector.every(v => v === 0);
+    
+    const scoredDocs = this.docs.map(doc => {
+      let score = 0;
+      if (!isZeroVector && doc.vector && !doc.vector.every(v => v === 0)) {
+        score = this.cosineSimilarity(queryVector, doc.vector);
+      }
+      
+      // Fallback matching: check if parameter name is present in search term or vice versa
+      const queryLower = query.toLowerCase();
+      const docParam = (doc.metadata?.parameter || '').toLowerCase();
+      if (docParam && (queryLower.includes(docParam) || docParam.includes(queryLower))) {
+        score += 1.5; // High confidence boost for parameter name overlap
+      }
+      
+      return {
+        ...doc,
+        score: score
+      };
+    });
 
     // Sort descending by score
     scoredDocs.sort((a, b) => b.score - a.score);
@@ -81,11 +104,19 @@ const initVectorStore = async () => {
 
   console.log('Initializing Vector Store from medicalData.json...');
   
-  // Define embeddings (using custom Ollama embeddings)
+  const baseUrl = process.env.OLLAMA_URL || 'http://localhost:11434';
   const embeddings = new CustomOllamaEmbeddings({
-    model: 'nomic-embed-text', // Or 'llama3' depending on what is installed
-    baseUrl: process.env.OLLAMA_URL || 'http://localhost:11434',
+    model: 'nomic-embed-text', 
+    baseUrl: baseUrl,
   });
+
+  let isOllamaOnline = false;
+  try {
+    await axios.get(baseUrl, { timeout: 1500 });
+    isOllamaOnline = true;
+  } catch (err) {
+    console.warn(`[RAG Startup] Ollama service at ${baseUrl} is offline. Vector store will initialize instantly with text fallback mode.`);
+  }
 
   try {
     const dataPath = path.join(__dirname, '../knowledgeBase/medicalData.json');
@@ -97,10 +128,21 @@ const initVectorStore = async () => {
     }));
 
     const store = new SimpleMemoryVectorStore(embeddings);
-    await store.addDocuments(docs);
+    
+    if (isOllamaOnline) {
+      await store.addDocuments(docs);
+    } else {
+      // Offline instant initialization using zero-vectors
+      for (const doc of docs) {
+        store.docs.push({
+          ...doc,
+          vector: new Array(768).fill(0)
+        });
+      }
+    }
     
     vectorStoreInstance = store;
-    console.log(`Vector Store initialized with ${docs.length} medical parameters.`);
+    console.log(`Vector Store initialized successfully with ${docs.length} medical parameters.`);
     return vectorStoreInstance;
   } catch (error) {
     console.error('Failed to initialize Vector Store:', error);
